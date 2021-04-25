@@ -1,0 +1,7 @@
+spring:
+  application.name: test-finances
+  datasource.url: jdbc:tc:postgresql:///finances?TC_REUSABLE=true
+  datasource.driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+server:
+  port: 11968

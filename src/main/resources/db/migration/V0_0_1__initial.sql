@@ -1,0 +1,10 @@
+CREATE DATABASE finances;
+
+CREATE TABLE invoices
+(
+    ID           SERIAL PRIMARY KEY NOT NULL,
+    CONCEPT      VARCHAR(255),
+    CATEGORY     VARCHAR(255),
+    AMOUNT       INTEGER
+);
+
