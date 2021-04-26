@@ -6,6 +6,6 @@ CREATE TABLE invoices
     AMOUNT       INTEGER
 );
 
-INSERT INTO public.invoices (concept, category, amount) VALUES ('guachinche', 'Restaurante', 10);
-INSERT INTO public.invoices (concept, category, amount) VALUES ('netflix', 'Suscripciones', 12);
-INSERT INTO public.invoices (concept, category, amount) VALUES ('xin-xin sushi', 'Restaurante', 30);
+INSERT INTO public.invoices (concept, category, amount) VALUES ('guachinche', 'RESTAURANTE', 10);
+INSERT INTO public.invoices (concept, category, amount) VALUES ('netflix', 'OCIO', 12);
+INSERT INTO public.invoices (concept, category, amount) VALUES ('xin-xin sushi', 'RESTAURANTE', 30);

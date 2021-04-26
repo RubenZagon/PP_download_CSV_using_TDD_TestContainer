@@ -11,8 +11,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,26 +33,25 @@ public class DownloadFile {
      */
     @RequestMapping(value = URL_GENERATE_INVOICE,
             method = RequestMethod.GET,
-            produces = "text/csv"
+            produces = {"text/csv;charset=UTF-8"}
     )
     public ResponseEntity downloadInvoiceCSV(
             @PathVariable(name = "cycle") final  Integer cycle,
-            @PathVariable(name = "month") String month,
-            HttpServletResponse response
+            @PathVariable(name = "month") String month
     ) {
         try {
             List<InvoiceDTO> invoiceLines = invoiceRetriever.execute(cycle, month);
-            downloadInvoiceCSV.execute(response.getWriter(),invoiceLines);
+            String body = downloadInvoiceCSV.execute(invoiceLines);
             MultiValueMap<String, String> headers = getDownloadCSVHeaders(cycle, month);
-            return new ResponseEntity(headers, HttpStatus.OK);
-        } catch (InvoiceNotFoundException | IOException e) {
+            return new ResponseEntity(body, headers, HttpStatus.OK);
+        } catch (InvoiceNotFoundException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
     private MultiValueMap<String, String> getDownloadCSVHeaders(Integer cycle, String invoiceNumber) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(Headers.CONTENT_TYPE, "text/csv");
+        headers.add(Headers.CONTENT_TYPE, "text/csv;charset=UTF-8");
         String attachmentFile = String.format("attachment; filename=factura_%s_%s.csv", cycle, invoiceNumber);
         headers.add(Headers.CONTENT_DISPOSITION, attachmentFile);
         return headers;
