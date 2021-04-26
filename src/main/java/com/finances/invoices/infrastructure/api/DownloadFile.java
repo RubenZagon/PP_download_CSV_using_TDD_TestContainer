@@ -39,14 +39,10 @@ public class DownloadFile {
             @PathVariable(name = "cycle") final  Integer cycle,
             @PathVariable(name = "month") String month
     ) {
-        try {
             List<InvoiceDTO> invoiceLines = invoiceRetriever.execute(cycle, month);
             String body = downloadInvoiceCSV.execute(invoiceLines);
             MultiValueMap<String, String> headers = getDownloadCSVHeaders(cycle, month);
             return new ResponseEntity(body, headers, HttpStatus.OK);
-        } catch (InvoiceNotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
     }
 
     private MultiValueMap<String, String> getDownloadCSVHeaders(Integer cycle, String invoiceNumber) {
