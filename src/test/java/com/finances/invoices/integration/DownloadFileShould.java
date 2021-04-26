@@ -1,5 +1,6 @@
 package com.finances.invoices.integration;
 
+import com.finances.invoices.application.InvoiceRetrieve;
 import com.finances.invoices.builders.Invoice;
 import com.finances.invoices.domain.CONCEPT_CATEGORY;
 import com.finances.invoices.domain.dto.InvoiceDTO;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -26,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class DownloadFileShould extends DatabaseTestSuite {
 
+
     static {
         initScript = "database/init.sql";
     }
@@ -35,8 +39,13 @@ class DownloadFileShould extends DatabaseTestSuite {
     @Autowired
     protected MockMvc mockMvc;
 
+    @MockBean
+    private InvoiceRetrieve invoiceRetrieve;
+
     @Test
     void download_a_invoice_file_csv() throws Exception {
+        Integer CYCLE = 2021;
+        String MONTH = "JULIO";
         List<InvoiceDTO> invoiceLines = new ArrayList<>();
         invoiceLines.add(new Invoice()
                                  .withCategory(CONCEPT_CATEGORY.RESTAURANTE)
@@ -54,8 +63,11 @@ class DownloadFileShould extends DatabaseTestSuite {
                                  .withAmount(BigDecimal.valueOf(30))
                                  .build());
 
+        when(invoiceRetrieve.execute(CYCLE, MONTH))
+                .thenReturn(invoiceLines);
+
         mockMvc
-                .perform(get(DOWNLOAD_INVOICE_CSV + "/" + "2021" + "/" + "JULIO").contentType("text/csv"))
+                .perform(get(DOWNLOAD_INVOICE_CSV + "/" + CYCLE + "/" + MONTH).contentType("text/csv"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedContent(invoiceLines)));
     }
@@ -64,11 +76,13 @@ class DownloadFileShould extends DatabaseTestSuite {
         String CSV_HEADERS = "Concepto, Categoría, Cantidad\n";
         String SEPARATOR = ",";
         StringBuilder body = new StringBuilder(CSV_HEADERS);
-        invoiceLines.stream().map(mapToGroupedInvoiceLine(SEPARATOR)).forEach(body::append);
+        invoiceLines.stream()
+                .map(mapToInvoiceLine(SEPARATOR))
+                .forEach(body::append);
         return body.toString();
     }
 
-    private Function<InvoiceDTO, String> mapToGroupedInvoiceLine(String SEPARATOR) {
+    private Function<InvoiceDTO, String> mapToInvoiceLine(String SEPARATOR) {
         return invoiceLine ->
                 invoiceLine.getConcept() + SEPARATOR +
                 invoiceLine.getCategory() + SEPARATOR +

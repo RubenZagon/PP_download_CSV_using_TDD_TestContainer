@@ -24,7 +24,7 @@ public class DownloadInvoiceCSV {
 
     private Function<InvoiceDTO, String> mapToInvoiceLine() {
         return invoiceLine ->
-                invoiceLine.getCategory() + SEPARATOR +
                 invoiceLine.getConcept() + SEPARATOR +
+                invoiceLine.getCategory() + SEPARATOR +
                 invoiceLine.getAmount() + JUMP_LINE; }
 }
