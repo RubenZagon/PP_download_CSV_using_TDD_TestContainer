@@ -22,8 +22,8 @@ public class DownloadFile {
 
     private static final String URL_GENERATE_INVOICE = "/download/csv/{cycle}/{month}";
 
-    InvoiceRetrieve invoiceRetriever;
-    DownloadInvoiceCSV downloadInvoiceCSV;
+    private final InvoiceRetrieve invoiceRetriever;
+    private final DownloadInvoiceCSV downloadInvoiceCSV;
 
     public DownloadFile(InvoiceRetrieve invoiceRetriever, DownloadInvoiceCSV downloadInvoiceCSV) {
         this.invoiceRetriever = invoiceRetriever;
@@ -46,7 +46,7 @@ public class DownloadFile {
             List<InvoiceDTO> invoiceLines = invoiceRetriever.execute(cycle, month);
             downloadInvoiceCSV.execute(response.getWriter(),invoiceLines);
             MultiValueMap<String, String> headers = getDownloadCSVHeaders(cycle, month);
-            return new ResponseEntity(headers, HttpStatus.CREATED);
+            return new ResponseEntity(headers, HttpStatus.OK);
         } catch (InvoiceNotFoundException | IOException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }

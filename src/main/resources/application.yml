@@ -1,1 +1,11 @@
+spring:
+  application.name: pet-finances
+  datasource:
+    url: jdbc:tc:postgresql:///finances?TC_REUSABLE=true
+    username: admin
+    password: pass
+    driver-class-name: org.postgresql.Driver
+#  flyway.enabled: true
 
+server:
+  port: 11968
