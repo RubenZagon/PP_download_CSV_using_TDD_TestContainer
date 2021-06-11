@@ -1,48 +1,72 @@
-plugins {
-	id 'org.springframework.boot' version '2.4.5'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'org.asciidoctor.convert' version '1.5.8'
-	id 'java'
-}
+def nonJavaModules = [':source-code']
+subprojects {
+    if (!nonJavaModules.contains(it.name)) {
+        apply plugin: 'java-library'
 
-group = 'com.finances'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+        java {
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
+        }
 
-repositories {
-	mavenCentral()
-}
+        dependencies {
+            implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+            implementation 'org.springframework.boot:spring-boot-starter-web'
+            //	implementation 'org.flywaydb:flyway-core'
+            implementation 'com.amazonaws:aws-java-sdk-s3:1.11.632'
+            implementation 'com.google.code.gson:gson:2.8.6'
+            runtimeOnly 'org.postgresql:postgresql'
+            testImplementation 'org.springframework.boot:spring-boot-starter-test'
+            testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+            testImplementation 'org.testcontainers:junit-jupiter'
+            testImplementation 'org.testcontainers:postgresql'
 
-ext {
-	set('snippetsDir', file("build/generated-snippets"))
-	set('testcontainersVersion', "1.15.3")
-}
+            testImplementation 'com.google.code.gson:gson:2.8.6'
+            testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+            testImplementation 'org.assertj:assertj-core:3.17.2'
+            testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+        }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.flywaydb:flyway-core'
-	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.632'
-	implementation 'com.google.code.gson:gson:2.8.6'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:postgresql'
-}
+        test {
+            useJUnitPlatform()
 
-dependencyManagement {
-	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-	}
-}
+            testLogging {
+                events "passed", "skipped", "failed"
+            }
 
-test {
-	outputs.dir snippetsDir
-	useJUnitPlatform()
-}
+            include '**/*Should.class'
+            exclude '**/*IT.class'
+        }
 
-asciidoctor {
-	inputs.dir snippetsDir
-	dependsOn test
+        apply from: "$rootDir/gradle/integrationTest.gradle"
+    }
+
+
+//    dependencyManagement {
+//        imports {
+//            mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+//        }
+//    }
+
+
+//    test {
+//        outputs.dir snippetsDir
+//        useJUnitPlatform()
+//    }
+
+//    asciidoctor {
+//        inputs.dir snippetsDir
+//        dependsOn test
+//    }
+
+    group 'com.financies'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+//    ext {
+//        set('snippetsDir', file("build/generated-snippets"))
+//        set('testcontainersVersion', "1.15.3")
+//    }
 }
