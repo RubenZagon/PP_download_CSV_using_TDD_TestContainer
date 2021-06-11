@@ -1,10 +1,9 @@
 package com.finances.invoices.integration;
 
 import com.finances.invoices.CONCEPT_CATEGORY;
-import com.finances.invoices.application.src.InvoiceRetrieve;
+import com.finances.invoices.InvoiceRetrieve;
 import com.finances.invoices.builders.Invoice;
-import com.finances.invoices.domain.src.CONCEPT_CATEGORY;
-import com.finances.invoices.domain.src.dto.InvoiceDTO;
+import com.finances.invoices.dto.InvoiceDTO;
 import com.finances.invoices.helpers.DatabaseTestSuite;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
