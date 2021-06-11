@@ -1,4 +1,4 @@
-package com.finances.invoices.infrastructure.src.configurations;
+package com.finances.invoices.configurations;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

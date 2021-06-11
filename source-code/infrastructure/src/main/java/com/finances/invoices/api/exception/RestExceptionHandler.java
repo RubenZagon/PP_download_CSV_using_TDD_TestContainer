@@ -1,5 +1,6 @@
-package com.finances.invoices.infrastructure.src.api.exception;
+package com.finances.invoices.api.exception;
 
+import com.finances.invoices.exceptions.InvoiceNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

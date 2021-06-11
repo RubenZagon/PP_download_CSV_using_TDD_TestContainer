@@ -2,18 +2,18 @@ package com.finances.invoices;
 
 
 import com.finances.invoices.dto.InvoiceDTO;
+import com.finances.invoices.exceptions.InvoiceNotFoundException;
+import com.finances.invoices.ports.TransactionRepository;
 
 import java.util.List;
 
 import static java.lang.String.format;
 
-@Service
 public class InvoiceRetrieve {
 
-    @Autowired
-    private final JdbcInvoicesRepository invoicesRepository;
+    private final TransactionRepository invoicesRepository;
 
-    public InvoiceRetrieve(JdbcInvoicesRepository invoicesRepository) {
+    public InvoiceRetrieve(TransactionRepository invoicesRepository) {
         this.invoicesRepository = invoicesRepository;
     }
 

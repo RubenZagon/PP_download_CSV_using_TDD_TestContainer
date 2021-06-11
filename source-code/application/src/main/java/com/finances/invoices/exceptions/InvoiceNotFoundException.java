@@ -1,4 +1,4 @@
-package com.finances.invoices.infrastructure.src.api.exception;
+package com.finances.invoices.exceptions;
 
 public class InvoiceNotFoundException extends RuntimeException {
     public InvoiceNotFoundException() {
