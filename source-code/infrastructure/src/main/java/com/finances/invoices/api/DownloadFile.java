@@ -1,9 +1,9 @@
 package com.finances.invoices.api;
 
 import com.amazonaws.services.s3.Headers;
-import com.finances.invoices.DownloadInvoiceCSV;
-import com.finances.invoices.InvoiceRetrieve;
 import com.finances.invoices.dto.InvoiceDTO;
+import com.finances.invoices.ports.DownloadInvoiceService;
+import com.finances.invoices.ports.TransactionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,10 +19,10 @@ public class DownloadFile {
 
     private static final String URL_GENERATE_INVOICE = "/download/csv/{cycle}/{month}";
 
-    private final InvoiceRetrieve invoiceRetriever;
-    private final DownloadInvoiceCSV downloadInvoiceCSV;
+    private final TransactionRepository invoiceRetriever;
+    private final DownloadInvoiceService downloadInvoiceCSV;
 
-    public DownloadFile(InvoiceRetrieve invoiceRetriever, DownloadInvoiceCSV downloadInvoiceCSV) {
+    public DownloadFile(TransactionRepository invoiceRetriever, DownloadInvoiceService downloadInvoiceCSV) {
         this.invoiceRetriever = invoiceRetriever;
         this.downloadInvoiceCSV = downloadInvoiceCSV;
     }
@@ -38,7 +38,7 @@ public class DownloadFile {
             @PathVariable(name = "cycle") final  Integer cycle,
             @PathVariable(name = "month") String month
     ) {
-            List<InvoiceDTO> invoiceLines = invoiceRetriever.execute(cycle, month);
+            List<InvoiceDTO> invoiceLines = invoiceRetriever.getAllInvoicesWith(cycle, month);
             String body = downloadInvoiceCSV.execute(invoiceLines);
             MultiValueMap<String, String> headers = getDownloadCSVHeaders(cycle, month);
             return new ResponseEntity(body, headers, HttpStatus.OK);
