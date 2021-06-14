@@ -2,12 +2,10 @@ package com.finances.invoices.adapters;
 
 import com.finances.invoices.dto.InvoiceDTO;
 import com.finances.invoices.ports.DownloadInvoiceService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Function;
 
-@Service
 public class DownloadInvoiceCSV implements DownloadInvoiceService {
 
     private static final String JUMP_LINE = "\n";

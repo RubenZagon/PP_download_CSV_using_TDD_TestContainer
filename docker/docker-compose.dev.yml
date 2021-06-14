@@ -1,5 +1,19 @@
-version: '2'
+version: '3.8'
+
+networks:
+  default:
+    name: pet_network
+
 services:
+  pet_finances:
+    image: "pet_finances-dev"
+    ports:
+      - "11968:11968"
+    environment:
+      - PROFILE=dev
+    depends_on:
+      - db-finances
+
   db-finances:
     image: postgres
     ports:
