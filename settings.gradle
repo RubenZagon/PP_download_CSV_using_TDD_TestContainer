@@ -1,1 +1,8 @@
 rootProject.name = 'invoices'
+include 'source-code'
+include 'source-code:application'
+findProject(':source-code:application')?.name = 'application'
+include 'source-code:domain'
+findProject(':source-code:domain')?.name = 'domain'
+include 'source-code:infrastructure'
+findProject(':source-code:infrastructure')?.name = 'pet_finances'

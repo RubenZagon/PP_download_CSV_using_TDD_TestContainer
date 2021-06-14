@@ -1,0 +1,4 @@
+version: '3.8'
+services:
+  pet_finances:
+    image: "registry/pet_finances-prod::${IMAGE_VERSION}"

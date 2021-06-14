@@ -1,0 +1,30 @@
+version: '3.8'
+
+networks:
+  default:
+    name: pet_network
+
+services:
+  pet_finances:
+    image: "pet_finances-dev"
+    ports:
+      - "11968:11968"
+    environment:
+      - PROFILE=dev
+    depends_on:
+      - db-finances
+
+  db-finances:
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    environment:
+      POSTGRES_DB: finances
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

@@ -1,0 +1,50 @@
+sourceSets {
+    integrationTest {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+        java.srcDir file('src/test/java')
+        resources.srcDir file('src/test/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+dependencies {
+    integrationTestImplementation 'org.assertj:assertj-core:3.17.2'
+    integrationTestImplementation 'org.mockito:mockito-junit-jupiter:3.5.13'
+    integrationTestImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    integrationTestImplementation 'org.mockito:mockito-core:3.5.13'
+    integrationTestRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+task integrationTest(type: Test, description: 'Runs long time execution tests.', group: LifecycleBasePlugin.VERIFICATION_GROUP) {
+    maxHeapSize = '1024m'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+
+    reports {
+        html.setDestination(file("$buildDir/test-results/integrationTest/reports/integrationTest"))
+        junitXml.setDestination(file("$buildDir/test-results/integrationTest/"))
+    }
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+
+    include '**/*IT.class'
+    exclude '**/*Should.class'
+
+    shouldRunAfter test
+}
+
+check.dependsOn integrationTest
+
+integrationTest {
+    useJUnitPlatform()
+}
