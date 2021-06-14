@@ -27,26 +27,7 @@ subprojects {
         }
 
         apply from: "$rootDir/gradle/integrationTest.gradle"
-
-//        dependencyManagement {
-//            imports {
-//                mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-//            }
-//        }
     }
-
-
-
-
-//    test {
-//        outputs.dir snippetsDir
-//        useJUnitPlatform()
-//    }
-
-//    asciidoctor {
-//        inputs.dir snippetsDir
-//        dependsOn test
-//    }
 
     group 'com.financies'
 
@@ -54,9 +35,4 @@ subprojects {
         mavenCentral()
         jcenter()
     }
-
-//    ext {
-//        set('snippetsDir', file("build/generated-snippets"))
-//    }
-//        set('testcontainersVersion', "1.15.3")
 }

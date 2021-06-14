@@ -98,7 +98,7 @@ dk-build-version:
 up: env-variables
 	echo "\n\n${MSG_SEPARATOR}\n\n 🐳 up => 🚀  Start container ${DOCKER_IMAGE_NAME} \n\n${MSG_SEPARATOR}\n\n"
 
-	docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up -d
+	docker-compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up
 
 	echo "\n\n${MSG_SEPARATOR}\n\n  🐳 Your app is running 🚀\n"
 	echo ""
